@@ -7,14 +7,18 @@
     "dev": "ts-node-dev src/server.ts"
   },
   "dependencies": {
+    "argon2": "^0.30.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^6.9.0"
   },
   "devDependencies": {
+    "@types/argon2": "^0.15.0",
     "@types/chalk": "^2.2.0",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.13",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^18.11.18",
     "chalk": "4.1.2",
     "ts-node": "^10.4.0",
