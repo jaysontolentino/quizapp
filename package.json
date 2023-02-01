@@ -1,0 +1,19 @@
+{
+  "name": "quizapp",
+  "version": "1.0.0",
+  "description": "A simple multiple choice quiz application.",
+  "main": "index.js",
+  "author": "Jayson Tolentino",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"wsrun --parallel dev\""
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "wsrun": "^5.2.4"
+  }
+}
