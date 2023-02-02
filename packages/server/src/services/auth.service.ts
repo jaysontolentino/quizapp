@@ -1,30 +1,17 @@
 
-interface IAuth {
-    generateAccessToken:  () => Promise<string>
-    generateRefreshToken: () => Promise<string>
-}
-
-export default class Auth implements IAuth {
+export default class Auth {
 
     constructor() {}
 
-    async login() {
-
+    async signIn({email, password}: {email: string, password: string}) {
+        //find the user with emaill
     }
 
-    async register() {
-
+    async gooogleSignIn(token: string) {
+        //find the user with
     }
 
     async refreshToken() {
         
-    }
-
-    async generateAccessToken() {
-        return 'token'
-    }
-
-    async generateRefreshToken() {
-        return ''
     }
 }

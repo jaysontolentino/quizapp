@@ -1,10 +1,13 @@
+import { NextFunction, Request, Response } from 'express';
 import http from 'http'
 import express from 'express'
 import cors from 'cors'
 import config from './config/config'
-import { logger } from './middlewares/logger';
+import { logger } from './middlewares/logger'
+import authRoute from 'src/routes/auth.route'
 import userRoute from './routes/user.route'
 import Database from './services/database.service'
+import createHttpError, { HttpError } from 'http-errors';
 
 
 async function main() {
@@ -28,7 +31,24 @@ async function startServer() {
   app.use(express.json())
   app.use(express.urlencoded({extended: false}))
   
+   app.use('/auth', authRoute)
   app.use('/users', userRoute)
+
+  app.use(function(req, res, next) {
+    const err = new createHttpError.NotFound()
+    next(err)
+  })
+
+  app.use(function(err: Error | HttpError, __: Request, res: Response, _: NextFunction) {
+
+    let error = err instanceof HttpError ? err : new createHttpError.InternalServerError
+    
+    res.status(error.statusCode)
+    res.json({
+      status: error.status,
+      error: error.message
+    })
+  })
   
   httpServer.listen(port, () => {
     console.log(`Server is running at ${host}:${port}`)

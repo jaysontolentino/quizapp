@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, { Document, Schema, Types } from 'mongoose'
 import * as argon2 from 'argon2'
 
 export interface IUser {
@@ -20,7 +20,8 @@ const UserSchema: Schema = new Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,

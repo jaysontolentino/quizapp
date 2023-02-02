@@ -1,13 +1,10 @@
-import { z } from 'zod'
-import { string } from 'zod/lib'
+import { z, string } from 'zod'
 
-const CreateUserSchema = z.object({
+export const CreateUserSchema = z.object({
     name: string({
         required_error: 'Name must not empty'
     }).min(3),
-    email: string({
-        required_error: 'Email must not empty'
-    }).email('Must be an email address'),
+    email: string().email(),
     password: string({
         required_error: 'Password must not empty'
     }).min(6),
@@ -15,7 +12,7 @@ const CreateUserSchema = z.object({
     auth_type: string()
 }).refine((data) => data.password_confirm === data.password, {
     message: 'Passwords must be match',
-    path: ['password_confirmation']
+    path: ['password_confirm']
 })
 
 export type TCreateUser = z.infer<typeof CreateUserSchema>
