@@ -1,4 +1,4 @@
-import { CreateUserInput } from 'src/dto/createUser.dto'
+import { CreateUserInput } from 'src/dto/user.dto'
 import User from './../models/user.model'
 
 export default class UserService {
