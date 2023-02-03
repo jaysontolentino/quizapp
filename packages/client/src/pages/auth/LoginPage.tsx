@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import Input from '../../components/forms/Input'
 import googleIcon from '../../assets/google.png'
+import Login from '../../features/auth/Login'
 
 
 const LoginPage = function() {
@@ -13,16 +13,8 @@ const LoginPage = function() {
                 <span className='text-slate-500'>Not yet registered? <Link to='/register' className='text-blue-600'>Sign Up</Link></span>
                 </div>
                 
-
-                <div className="bg-white py-10 px-6 rounded-lg shadow-md flex flex-col items-center gap-y-4 w-full">
-                    
-                    <Input type="email" placeholder="Email" />
-                    <Input type="password" placeholder="Password" />
-
-                    <button className='w-full rounded-md border-none outline-none py-3 bg-blue-600 text-white hover:bg-blue-500'>Sign In</button>
-
-                    
-                </div>
+                {/* Login features */}
+                <Login />
 
                 <span>Or</span>
 
