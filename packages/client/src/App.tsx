@@ -5,6 +5,7 @@ import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
 import Home from './pages/Home.page'
 import Layout from './components/Layout'
+import Quiz from './features/quiz/Quiz'
 
 function App() {
 
@@ -16,7 +17,9 @@ function App() {
         <Route path='login' element={<LoginPage />} />
         <Route path='register' element={<RegisterPage />} />
 
-        <Route path='quiz' element={<Layout />} />
+        <Route path='quiz' element={<Layout />} >
+          <Route path=':id' element={<Quiz />} />
+        </Route>
 
       <Route path='*' element={<PageNotFound />} />
     </Routes>

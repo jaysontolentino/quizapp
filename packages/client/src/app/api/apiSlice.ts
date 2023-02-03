@@ -3,7 +3,7 @@ import { RootState } from '../store'
 import { logout, setAuthToken } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'localhost',
+    baseUrl: 'http://localhost:8080',
     credentials: 'include',
     prepareHeaders(headers, api) {
 
@@ -42,4 +42,11 @@ export const apiSlice = createApi({
     endpoints(build) {
         return {}
     },
+})
+
+export const defaultApiSlice = createApi({
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'http://localhost:8080',
+    }),
+    endpoints: builder => ({})
 })

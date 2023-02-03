@@ -1,10 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from './../features/auth/authSlice'
-import { apiSlice } from "./api/apiSlice";
+import { apiSlice, defaultApiSlice } from './api/apiSlice'
+import quizReducer from '../features/quiz/quizSlice'
 
 const rootReducer = combineReducers({
     [apiSlice.reducerPath]: apiSlice.reducer,
+    [defaultApiSlice.reducerPath]: defaultApiSlice.reducer,
     auth: authReducer,
+    quiz: quizReducer
 })
 
 const store = configureStore({

@@ -4,10 +4,11 @@ import express from 'express'
 import cors from 'cors'
 import config from './config/config'
 import { logger } from './middlewares/logger'
-import authRoute from 'src/routes/auth.route'
+import authRoute from './routes/auth.route'
 import userRoute from './routes/user.route'
+import quizRoute from './routes/quiz.route'
 import Database from './services/database.service'
-import createHttpError, { HttpError } from 'http-errors';
+import createHttpError, { HttpError } from 'http-errors'
 
 
 async function main() {
@@ -27,12 +28,16 @@ async function startServer() {
   const httpServer: http.Server = http.createServer(app)
   
   app.use(logger)
-  app.use(cors())
+  app.use(cors({
+    origin: 'http://127.0.0.1:5173',
+    credentials: true
+  }))
   app.use(express.json())
   app.use(express.urlencoded({extended: false}))
   
-   app.use('/auth', authRoute)
+  app.use('/auth', authRoute)
   app.use('/users', userRoute)
+  app.use('/quiz', quizRoute)
 
   app.use(function(req, res, next) {
     const err = new createHttpError.NotFound()
