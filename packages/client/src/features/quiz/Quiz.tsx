@@ -3,6 +3,8 @@ import OptionGroup from '../../components/forms/OptionGroup'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { selectActive, selectAnswer } from './quizSlice'
+import Button from '../../components/Button'
+import { IoMdArrowRoundBack, IoMdArrowRoundForward } from 'react-icons/io'
 
 const Quiz = function() {
 
@@ -22,15 +24,15 @@ const Quiz = function() {
         error
     } = useGetQuizByNoQuery(id)
 
-    const onClickNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onClickNext = () => {
 
         let nextId = id + 1;
 
-        
+        dispatch(selectAnswer(''))
         navigate(`/quiz/${nextId}`)
     }
 
-    const onClickPrev = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onClickPrev = () => {
         dispatch(selectAnswer(''))
         navigate(-1)
     }
@@ -43,8 +45,15 @@ const Quiz = function() {
         
         return (
             <>
-                <div className='w-full md:w-[800px] md:flex-row'>
-                    <button onClick={onClickPrev} className="bg-green-400 px-6 py-2 rounded-md text-white self-start">Previous Question</button>
+                <div className='w-full flex flex-col md:w-[800px] md:flex-row md:justify-between'>
+                    <Button bgColor='indigo' handleClick={onClickPrev} >
+                        <IoMdArrowRoundBack />
+                        <span>Previous Question</span>
+                    </Button>
+                    <Button bgColor='indigo' handleClick={onClickNext} >
+                        <span>Next Question</span>
+                        <IoMdArrowRoundForward />
+                    </Button>
                 </div>
                 
                 
@@ -63,8 +72,6 @@ const Quiz = function() {
 
                                     <OptionGroup options={quiz.options} />
                                 </div>
-                                
-                                <button onClick={onClickNext} className="bg-indigo-500 w-full py-2 rounded-md text-white">Submit</button>
 
                             </div>
                     </div>
