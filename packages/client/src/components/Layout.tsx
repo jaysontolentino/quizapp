@@ -1,14 +1,20 @@
-import { Outlet, useParams } from "react-router-dom"
-import Button from "./Button"
-import { useAppSelector } from "../app/hooks"
-import { selectAuthToken } from "../features/auth/authSlice"
-import {AiTwotoneHome} from 'react-icons/ai'
+import { Outlet, useNavigate } from 'react-router-dom'
+import Button from './Button'
+import { useAppDispatch } from '../app/hooks'
+import { logout } from '../features/auth/authSlice'
+import { useSignOutMutation } from '../features/auth/authApiSlice'
 
 const Layout = function() {
 
-    const params = useParams()
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const [signOut, signOutResult] = useSignOutMutation()
 
-    const token = useAppSelector(selectAuthToken)
+    const handleLogout = async () => {
+        await signOut(null)
+        dispatch(logout())
+        navigate('/login')
+    }
 
     return (
         <div className="w-screen h-screen flex flex-col bg-slate-200">
@@ -18,7 +24,9 @@ const Layout = function() {
                    <h3 className="text-xl font-black">Quiz App</h3>
                 </div>
                 
-                <Button bgColor='green' handleClick={() => {}}>End Session</Button>
+                <Button bgColor='green' handleClick={handleLogout}>
+                    {signOutResult.isLoading ? 'Signing out...' : 'End Session'}
+                </Button>
             </nav>
 
             <main className="flex flex-1 flex-col items-center  bg-indigo-50 px-6 py-4">

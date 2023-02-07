@@ -10,29 +10,19 @@ import Quiz from './features/quiz/Quiz'
 import QuizIntro from './components/QuizIntro'
 import AuthChecker from './features/auth/AuthChecker'
 import AuthProvider from './features/auth/AuthProvider'
-import { initialState, selectQuiz, setData } from './features/quiz/quizSlice'
-import { useLocalStorage } from './hooks/useLocalStorage'
-import { useAppDispatch, useAppSelector } from './app/hooks'
+import { selectQuiz,  } from './features/quiz/quizSlice'
+import { useAppSelector } from './app/hooks'
+import { selectAuth } from './features/auth/authSlice'
 
 function App() {
-
-  const dispatch = useAppDispatch()
-  const {getState, setState} = useLocalStorage()
-
   const quizState = useAppSelector(selectQuiz)
+  const authState = useAppSelector(selectAuth)
 
   useEffect(() => {
+    console.log('Redux Quiz state --> ', quizState)
+    console.log('Redux Auth state -->', authState)
 
-    const x = getState('quiz')
-    console.log('Quiz redux state --> ', quizState)
-    console.log('local storage value --> ', x)
-
-    const data = getState('quiz') || initialState
-
-    setState('quiz', data)
-
-    dispatch(setData(data))
-
+    console.log('Token --> ', authState.token)
   }, [])
 
   return (

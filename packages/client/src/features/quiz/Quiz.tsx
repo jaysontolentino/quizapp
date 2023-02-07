@@ -2,11 +2,10 @@ import { useGetQuizByNoQuery } from './quizApiSlice'
 import OptionGroup from '../../components/forms/OptionGroup'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { addAnswer, selectAnswer, selectQuiz, selectedAnswer, setActive } from './quizSlice'
+import { addAnswer, itemCount, selectAnswer, selectQuiz, selectedAnswer, setActive } from './quizSlice'
 import Button from '../../components/Button'
 import { IoMdArrowRoundBack, IoMdArrowRoundForward } from 'react-icons/io'
 import { AiTwotoneHome } from 'react-icons/ai'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 const Quiz = function() {
 
@@ -15,10 +14,7 @@ const Quiz = function() {
 
     const dispatch = useAppDispatch()
     const selected = useAppSelector(selectedAnswer)
-    const quizState = useAppSelector(selectQuiz)
-
-
-    const {setState} = useLocalStorage()
+    const count = useAppSelector(itemCount)
 
     const id = Number(params.id)
 
@@ -37,14 +33,15 @@ const Quiz = function() {
         dispatch(selectAnswer(null))
         dispatch(setActive(nextId))
         dispatch(addAnswer({id: selected?.id as number, value: selected?.value as string}))
-
-        setState('quiz', quizState)
         navigate(`/quiz/${nextId}`)
     }
 
     const onClickPrev = () => {
+
+        let prevId = id - 1;
+
         dispatch(selectAnswer(null))
-        navigate(-1)
+        navigate(`/quiz/${prevId}`)
     }
 
 
@@ -69,7 +66,8 @@ const Quiz = function() {
                         </Button>
                     )}
                     
-                    {selected && (
+                    
+                    {(selected && (id < count)) && (
                         <Button bgColor='indigo' handleClick={onClickNext} >
                             <span>Next Question</span>
                             <span className='hidden md:block'><IoMdArrowRoundForward /></span> 

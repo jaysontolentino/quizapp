@@ -1,5 +1,6 @@
 import { apiSlice } from '../../app/api/apiSlice'
-import { setAuthToken } from './authSlice'
+import { reset } from '../quiz/quizSlice'
+import { logout, setAuthToken, setAuthUser } from './authSlice'
 
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints(build) {
@@ -11,6 +12,19 @@ export const authApiSlice = apiSlice.injectEndpoints({
                         method: 'POST',
                         body: {email, password}
                     }
+                },
+            }),
+            signOut: build.mutation({
+                query() {
+                    return {
+                        url: '/auth/signout',
+                        method: 'POST'
+                    }
+                },
+                async onQueryStarted(arg, api) {
+                    await api.queryFulfilled
+                    api.dispatch(logout())
+                    api.dispatch(reset())
                 },
             }),
             refresh: build.mutation({
@@ -25,9 +39,27 @@ export const authApiSlice = apiSlice.injectEndpoints({
                     const token = result.data.token
                     api.dispatch(setAuthToken(token))
                 },
-            })
+            }),
+            getUser: build.mutation({
+                query() {
+                    return {
+                        url: '/auth/get-auth-user',
+                        method: 'GET'
+                    }
+                },
+                async onQueryStarted(arg, api) {
+                    const result = await api.queryFulfilled
+                    const user = result.data.user
+                    api.dispatch(setAuthUser({name: user.name, email: user.email}))
+                },
+            }),
         }
     },
 })
 
-export const { useSignInMutation, useRefreshMutation } = authApiSlice
+export const { 
+    useSignInMutation,
+    useSignOutMutation,
+    useRefreshMutation,
+    useGetUserMutation
+ } = authApiSlice

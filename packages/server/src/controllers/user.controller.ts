@@ -3,13 +3,9 @@ import { TCreateUser } from './../schema/user.schema';
 import { Response, Request, NextFunction } from 'express'
 
 const getAllUsers = async function(req: Request, res: Response, next: NextFunction) {
-
     try {
         const users = await UserService.getAllUser()
-
-        res.json({
-            users
-        })
+        res.json({users})
     } catch (error) {
         next(error)
     }
@@ -25,11 +21,7 @@ const createUser = async function(
 
     try {
         const user = await UserService.createUser(body)
-
-        res.json({
-            user
-        })
-
+        res.json({user})
     } catch (error) {
         console.log(error.message)
         next(error)

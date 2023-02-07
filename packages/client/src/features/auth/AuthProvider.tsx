@@ -1,6 +1,6 @@
 import { Outlet, Link } from "react-router-dom"
 import { useEffect, useRef, useState } from 'react'
-import { useRefreshMutation } from "./authApiSlice"
+import { useGetUserMutation, useRefreshMutation } from "./authApiSlice"
 import { useSelector } from 'react-redux'
 import { selectAuthToken } from "./authSlice"
 
@@ -19,6 +19,8 @@ const AuthProvider = function() {
         error
     }] = useRefreshMutation()
 
+    const [user, userResult] = useGetUserMutation()
+
     useEffect(()=> {
 
         if (effectRan.current === true || process.env.NODE_ENV !== 'development') { 
@@ -30,6 +32,8 @@ const AuthProvider = function() {
                     await refresh(null)
                     //const { accessToken } = response.data
                     setTrueSuccess(true)
+
+                    await user(null)
                 }
                 catch (err) {
                     //console.error(err)

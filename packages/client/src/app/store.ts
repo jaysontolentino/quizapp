@@ -1,25 +1,34 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit"
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import storage from 'redux-persist/lib/storage'
+import {persistReducer, persistStore} from 'redux-persist'
 import authReducer from './../features/auth/authSlice'
 import { apiSlice, defaultApiSlice } from './api/apiSlice'
 import quizReducer from '../features/quiz/quizSlice'
+
+const persistConfig = {
+    key: 'root',
+    storage
+}
+
+const persistedQuizReducer = persistReducer(persistConfig, quizReducer)
 
 const rootReducer = combineReducers({
     [apiSlice.reducerPath]: apiSlice.reducer,
     //[defaultApiSlice.reducerPath]: defaultApiSlice.reducer,
     auth: authReducer,
-    quiz: quizReducer
+    quiz: persistedQuizReducer
 })
 
-const store = configureStore({
+export const store = configureStore({
     reducer: rootReducer,
     middleware(getDefaultMiddleware) {
-        return getDefaultMiddleware().concat(apiSlice.middleware)
+        return getDefaultMiddleware({serializableCheck: false}).concat(apiSlice.middleware)
     },
-    devTools: true
+    devTools: false
 })
 
 export type RootState = ReturnType<typeof rootReducer>
 
 export type AppDispatch = typeof store.dispatch
 
-export default store
+export const persistor = persistStore(store)

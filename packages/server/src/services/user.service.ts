@@ -15,7 +15,7 @@ export default class UserService {
 
     static async findUser(id: string) {
         try {
-            const user = await User.findOne({_id: id})
+            const user = await User.findOne({_id: id}).select('-password')
             return user
         } catch (error) {
             throw error

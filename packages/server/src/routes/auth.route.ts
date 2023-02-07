@@ -10,5 +10,7 @@ router.post('/signin', validateInput<TypeLoginSchema>(loginSchema), authControll
 router.post('/signup', validateInput<TypeRegisterSchema>(registerSchema), authController.signUp)
 router.post('/signout', isAuthenticated, authController.signOut)
 router.get('/refresh-token', authController.refreshToken)
+router.get('/get-auth-user', isAuthenticated, authController.getAuthUser)
+
 
 export default router

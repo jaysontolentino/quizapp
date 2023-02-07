@@ -9,6 +9,7 @@ export interface IQuizState {
     started: boolean
     completed: boolean
     answers: Array<{id: number, value: string}>
+    itemCount: number
 }
 
 export const initialState: IQuizState = {
@@ -17,8 +18,8 @@ export const initialState: IQuizState = {
     score: 0,
     started: false,
     completed: false,
-    answers: []
-
+    answers: [],
+    itemCount: 2
 }
 
 const quizSlice = createSlice({
@@ -51,6 +52,12 @@ const quizSlice = createSlice({
                 ...state,
                 ...action.payload
             }
+        },
+        reset: (state) => {
+            return {
+                ...state,
+                ...initialState
+            }
         }
     },
     extraReducers: (builder) => {}
@@ -63,6 +70,7 @@ export const {
     setStarted,
     setCompleted,
     addAnswer,
+    reset,
     setData
  } = quizSlice.actions
 
@@ -72,6 +80,7 @@ export const score = (state: RootState) => state.quiz.score
 export const started = (state: RootState) => state.quiz.started
 export const completed = (state: RootState) => state.quiz.completed
 export const answers = (state: RootState) => state.quiz.answers
+export const itemCount = (state: RootState) => state.quiz.itemCount
 export const selectQuiz = (state: RootState) => state.quiz
 
 

@@ -16,14 +16,11 @@ const signIn = async function(req: Request, res: Response, next: NextFunction) {
         const token = await createToken('access_token', {user_id: user.id as string, email: user.email})
         const refreshToken = await createToken('refresh_token', {user_id: user.id as string, email: user.email})
 
-        const refreshTokenExp = Number(config.jwt.refreshTokenExp)
-
         res.cookie('rtx', refreshToken, {
             sameSite: 'none',
             httpOnly: true,
             secure: true,
-            expires: new Date(Date.now() + refreshTokenExp * 60 * 1000),
-            maxAge: refreshTokenExp * 60 * 1000
+            maxAge: 24 * 60 * 60 * 1000
         })
 
         res.json({
@@ -43,14 +40,11 @@ const signUp = async function(req: Request<{},{},TRegisterSchema>, res: Response
         const token = await createToken('access_token', {user_id: user.id as string, email: user.email})
         const refreshToken = await createToken('refresh_token', {user_id: user.id as string, email: user.email})
 
-        const refreshTokenExp = Number(config.jwt.refreshTokenExp)
-
         res.cookie('rtx', refreshToken, {
             sameSite: 'none',
             httpOnly: true,
             secure: true,
-            expires: new Date(Date.now() + refreshTokenExp * 60 * 1000),
-            maxAge: refreshTokenExp * 60 * 1000
+            maxAge: 24 * 60 * 60 * 1000
         })
 
         res.json({
@@ -65,8 +59,7 @@ const signUp = async function(req: Request<{},{},TRegisterSchema>, res: Response
 
 const signOut = function(req: Request, res: Response, next: NextFunction) {
     try {
-        res.cookie('rtx', '', {maxAge: -1})
-
+        res.clearCookie('rtx', { httpOnly: true, sameSite: 'none', secure: true })
         res.json({
             success: true
         })
@@ -89,19 +82,14 @@ const refreshToken = async function(req: Request, res: Response, next: NextFunct
 
         if(!user) throw new createHttpError.Forbidden("Failed to refresh token")
 
-        console.log('user, ', user)
-
         const newToken = await createToken('access_token', {user_id: user.id as string, email: user.email})
         const newRefreshToken = await createToken('refresh_token', {user_id: user.id as string, email: user.email})
-
-        const refreshTokenExp = Number(config.jwt.refreshTokenExp)
 
         res.cookie('rtx', newRefreshToken, {
             sameSite: 'none',
             httpOnly: true,
             secure: true,
-            expires: new Date(Date.now() + refreshTokenExp * 60 * 1000),
-            maxAge: refreshTokenExp * 60 * 1000,
+            maxAge: 24 * 60 * 60 * 1000
         })
 
         res.json({
@@ -113,9 +101,20 @@ const refreshToken = async function(req: Request, res: Response, next: NextFunct
     }
 }
 
+const getAuthUser = async function(req: Request, res: Response, next: NextFunction) {
+    try {
+        res.json({
+            user: req.user
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export default {
     signIn,
     signUp,
     signOut,
-    refreshToken
+    refreshToken,
+    getAuthUser
 }
