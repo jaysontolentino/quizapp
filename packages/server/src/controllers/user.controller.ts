@@ -1,13 +1,11 @@
+import UserService from './../services/user.service'
 import { TCreateUser } from './../schema/user.schema';
 import { Response, Request, NextFunction } from 'express'
-import UserService from './../services/user.service'
-
-const userService = new UserService
 
 const getAllUsers = async function(req: Request, res: Response, next: NextFunction) {
 
     try {
-        const users = await userService.geAllUser()
+        const users = await UserService.getAllUser()
 
         res.json({
             users
@@ -26,7 +24,7 @@ const createUser = async function(
     const {body} = req
 
     try {
-        const user = await userService.createUser(body)
+        const user = await UserService.createUser(body)
 
         res.json({
             user

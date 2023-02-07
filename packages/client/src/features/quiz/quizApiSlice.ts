@@ -1,6 +1,6 @@
-import { apiSlice, defaultApiSlice } from '../../app/api/apiSlice'
+import { apiSlice } from '../../app/api/apiSlice'
 
-export const quizApiSlice = defaultApiSlice.injectEndpoints({
+export const quizApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getQuizByNo: builder.query({
             query: (id: number) => ({url: `quiz/${id}`}),

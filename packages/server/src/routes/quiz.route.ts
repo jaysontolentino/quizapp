@@ -1,7 +1,10 @@
+import { isAuthenticated } from './../middlewares/isAuthenticated';
 import express from 'express'
 import quizController from './../controllers/quiz.controller'
 
 const router = express.Router()
+
+router.use(isAuthenticated)
 
 router.get('/', quizController.getAllQuiz)
 router.get('/:id', quizController.getQuizById)

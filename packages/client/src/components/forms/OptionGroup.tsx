@@ -20,7 +20,7 @@ const OptionGroup: FunctionComponent<IOptionGroupProps> = function({ options }) 
     return (
         <div className='flex flex-col w-full gap-y-4'>
             {options.map((option, index) => {
-                return (<Option isActive={option.value === selected} key={index} option={option} />)
+                return (<Option isActive={option.value === selected?.value} key={index} option={option} />)
             })}
         </div>
     )

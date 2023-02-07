@@ -29,7 +29,8 @@ const UserSchema: Schema = new Schema({
     },
     auth_type: {
         type: String,
-        required: true
+        required: true,
+        default: 'basic'
     }
 }, {
     timestamps: true,

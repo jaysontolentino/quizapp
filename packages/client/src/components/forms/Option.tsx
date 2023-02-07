@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react'
 import { IoIosRadioButtonOff, IoIosRadioButtonOn } from 'react-icons/io'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { selectAnswer, selectedAnswer } from '../../features/quiz/quizSlice'
+import { selectAnswer, active } from '../../features/quiz/quizSlice'
 
 export interface IOption {
     value: string,
@@ -16,10 +16,10 @@ interface IOptionProps {
 const Option: FunctionComponent<IOptionProps> = function({ option, isActive }) {
 
     const dispatch = useAppDispatch()
-    
+    const selectActive = useAppSelector(active)
 
     const onClick = () => {
-        dispatch(selectAnswer(option.value))
+        dispatch(selectAnswer({id: selectActive, value: option.value}))
     }
 
     return (

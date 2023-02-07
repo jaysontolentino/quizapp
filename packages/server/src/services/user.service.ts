@@ -1,10 +1,10 @@
-import { CreateUserInput, TUserResponse } from 'src/dto/user.dto'
+import { CreateUserInput } from './../dto/user.dto'
 import User from './../models/user.model'
 
 export default class UserService {
     constructor() {}
 
-    async geAllUser(): Promise<TUserResponse> {
+    static async getAllUser() {
         try {
             const users = await User.find().select('-password')
             return users
@@ -13,7 +13,16 @@ export default class UserService {
         }
     }
 
-    async createUser(input: CreateUserInput) {
+    static async findUser(id: string) {
+        try {
+            const user = await User.findOne({_id: id})
+            return user
+        } catch (error) {
+            throw error
+        }
+    }
+
+    static async createUser(input: CreateUserInput) {
         try {
             return await User.create(input)
         } catch (error) {

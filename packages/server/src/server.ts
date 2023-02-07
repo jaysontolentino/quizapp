@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import http from 'http'
 import express from 'express'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import config from './config/config'
 import { logger } from './middlewares/logger'
 import authRoute from './routes/auth.route'
@@ -33,6 +34,7 @@ async function startServer() {
     credentials: true
   }))
   app.use(express.json())
+  app.use(cookieParser())
   app.use(express.urlencoded({extended: false}))
   
   app.use('/auth', authRoute)
@@ -46,7 +48,7 @@ async function startServer() {
 
   app.use(function(err: Error | HttpError, __: Request, res: Response, _: NextFunction) {
 
-    let error = err instanceof HttpError ? err : new createHttpError.InternalServerError
+    let error = err instanceof HttpError ? err : new createHttpError.InternalServerError(err.message)
     
     res.status(error.statusCode)
     res.json({

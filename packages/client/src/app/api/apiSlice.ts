@@ -10,7 +10,7 @@ const baseQuery = fetchBaseQuery({
         let state = api.getState() as RootState
         let token = state.auth.token
 
-        if(token) headers.set('authorization', 'Bearer' + token)
+        if(token) headers.set('authorization', 'Bearer ' + token)
         
         return headers
     },
@@ -21,8 +21,8 @@ const baseQueryWithAuth = async function(args: string | FetchArgs, api: BaseQuer
     let result = await baseQuery(args, api, extraOptions)
 
     // Unauthorized request
-    if(result.error?.status === 403) {
-        const refreshToken = await baseQuery('/refresh-token', api, extraOptions)
+    if(result.error?.status === 401) {
+        const refreshToken = await baseQuery('/auth/refresh-token', api, extraOptions)
 
         if(refreshToken?.data) {
             const data = refreshToken.data as {token: string}
@@ -31,14 +31,14 @@ const baseQueryWithAuth = async function(args: string | FetchArgs, api: BaseQuer
         } else {
             api.dispatch(logout)
         }
-
-        return result
-        
     }
+
+    return result
 }
 
 export const apiSlice = createApi({
     baseQuery: baseQueryWithAuth as BaseQueryFn,
+    tagTypes: ['Quiz'],
     endpoints(build) {
         return {}
     },

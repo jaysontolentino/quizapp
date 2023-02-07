@@ -3,22 +3,29 @@ import { RootState } from '../../app/store'
 
 
 export interface IQuizState {
-    selected: string
+    selected: {id: number, value: string} | null
     active: number
     score: number
+    started: boolean
+    completed: boolean
+    answers: Array<{id: number, value: string}>
 }
 
-const initialState: IQuizState = {
-    selected: '',
+export const initialState: IQuizState = {
+    selected: null,
     active: 1,
-    score: 0
+    score: 0,
+    started: false,
+    completed: false,
+    answers: []
+
 }
 
 const quizSlice = createSlice({
     name: 'quiz',
     initialState,
     reducers:{
-        selectAnswer: (state, action: PayloadAction<string>) => {
+        selectAnswer: (state, action: PayloadAction<{id: number, value: string} | null>) => {
             state.selected = action.payload
         },
         setActive: (state, action: PayloadAction<number>) => {
@@ -27,14 +34,45 @@ const quizSlice = createSlice({
         setScore: (state, action: PayloadAction<number>) => {
             state.score = action.payload
         },
+        setStarted: (state, action: PayloadAction<boolean>) => {
+            state.started = action.payload
+        },
+        setCompleted: (state, action: PayloadAction<boolean>) => {
+            state.completed = action.payload
+        },
+        addAnswer: (state, action: PayloadAction<{id: number, value: string}>) => {
+            state.answers = [
+                ...state.answers,
+                action.payload
+            ]
+        },
+        setData: (state, action: PayloadAction<IQuizState>) => {
+            return {
+                ...state,
+                ...action.payload
+            }
+        }
     },
     extraReducers: (builder) => {}
 })
 
-export const { selectAnswer } = quizSlice.actions
+export const { 
+    selectAnswer, 
+    setActive, 
+    setScore,
+    setStarted,
+    setCompleted,
+    addAnswer,
+    setData
+ } = quizSlice.actions
 
 export const selectedAnswer = (state: RootState) => state.quiz.selected
-export const selectActive = (state: RootState) => state.quiz.active
-export const selectScore= (state: RootState) => state.quiz.score
+export const active = (state: RootState) => state.quiz.active
+export const score = (state: RootState) => state.quiz.score
+export const started = (state: RootState) => state.quiz.started
+export const completed = (state: RootState) => state.quiz.completed
+export const answers = (state: RootState) => state.quiz.answers
+export const selectQuiz = (state: RootState) => state.quiz
+
 
 export default quizSlice.reducer
