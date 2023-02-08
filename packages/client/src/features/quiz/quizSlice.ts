@@ -3,12 +3,12 @@ import { RootState } from '../../app/store'
 
 
 export interface IQuizState {
-    selected: {id: number, value: string} | null
+    selected: {id: number, value: string, label: string} | null
     active: number
     score: number
     started: boolean
     completed: boolean
-    answers: Array<{id: number, value: string}>
+    answers: Array<{id: number, value: string, label: string}>
     itemCount: number
 }
 
@@ -26,7 +26,7 @@ const quizSlice = createSlice({
     name: 'quiz',
     initialState,
     reducers:{
-        selectAnswer: (state, action: PayloadAction<{id: number, value: string} | null>) => {
+        selectAnswer: (state, action: PayloadAction<{id: number, value: string, label: string} | null>) => {
             state.selected = action.payload
         },
         setActive: (state, action: PayloadAction<number>) => {
@@ -41,7 +41,7 @@ const quizSlice = createSlice({
         setCompleted: (state, action: PayloadAction<boolean>) => {
             state.completed = action.payload
         },
-        addAnswer: (state, action: PayloadAction<{id: number, value: string}>) => {
+        addAnswer: (state, action: PayloadAction<{id: number, value: string, label: string}>) => {
             state.answers = [
                 ...state.answers,
                 action.payload
