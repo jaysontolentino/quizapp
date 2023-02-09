@@ -3,16 +3,17 @@ import OptionGroup from '../../components/forms/OptionGroup'
 import Option, { IOption } from './../../components/forms/Option'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { addAnswer, answers, itemCount, selectAnswer, selectQuiz, selectedAnswer, setActive } from './quizSlice'
+import { addAnswer, answers, completed, itemCount, selectAnswer, selectQuiz, selectedAnswer, setActive, setCompleted } from './quizSlice'
 import Button from '../../components/Button'
 import { IoMdArrowRoundBack, IoMdArrowRoundForward } from 'react-icons/io'
 import { AiTwotoneHome } from 'react-icons/ai'
 import {useEffect, useRef, useState} from 'react'
+import OptionGroupDisabled from '../../components/forms/OptionGroupDisabled'
 
 const Quiz = function() {
 
     const [isAnswered, setIsAnswered] = useState(false)
-    const [selectedOption, setSelectedOption] = useState<IOption>({value: '', label: ''})
+    const [selectedOption, setSelectedOption] = useState<IOption>({id: 0, value: '', label: ''})
     const params = useParams()
     const navigate = useNavigate()
 
@@ -20,6 +21,7 @@ const Quiz = function() {
     const selected = useAppSelector(selectedAnswer)
     const count = useAppSelector(itemCount)
     const anweredQuestions = useAppSelector(answers)
+    const isCompleted = useAppSelector(completed)
 
     const id = Number(params.id)
 
@@ -37,11 +39,15 @@ const Quiz = function() {
 
         dispatch(selectAnswer(null))
         dispatch(setActive(nextId))
-        dispatch(addAnswer({
-            id: selected?.id as number, 
-            value: selected?.value as string,
-            label: selected?.label as string
-        }))
+
+        if(!isAnswered) {
+            dispatch(addAnswer({
+                id: selected?.id as number, 
+                value: selected?.value as string,
+                label: selected?.label as string
+            })) 
+        }
+        
         navigate(`/quiz/${nextId}`)
     }
 
@@ -53,15 +59,37 @@ const Quiz = function() {
         navigate(`/quiz/${prevId}`)
     }
 
+    const onClickFinish = () => {
+
+        if(!isAnswered) {
+            dispatch(addAnswer({
+                id: selected?.id as number, 
+                value: selected?.value as string,
+                label: selected?.label as string
+            })) 
+        }
+
+        dispatch(setCompleted(true))
+        navigate('/result')
+    }
+
     useEffect(() => {
-        
+
+        if(id > count) {
+            navigate('/quiz')
+        }
+
+        if(isCompleted) {
+            navigate('/result')
+        }
+         
         let answered = anweredQuestions.find(answer => answer.id === id)
 
         if(answered) {
             setSelectedOption(answered)
             setIsAnswered(true)
         } else {
-            setSelectedOption({value: '', label: ''})
+            setSelectedOption({id: 0, value: '', label: ''})
             setIsAnswered(false)
         }
 
@@ -103,6 +131,13 @@ const Quiz = function() {
                             <span className='hidden md:block'><IoMdArrowRoundForward /></span> 
                         </Button>
                     )}
+
+                    {(selected && id===count) && (
+                        <Button bgColor='green' handleClick={onClickFinish} >
+                            <span>Finish</span>
+                            <span className='hidden md:block'><IoMdArrowRoundForward /></span>
+                        </Button>
+                    )}
                     
                 </div>
                 
@@ -118,7 +153,7 @@ const Quiz = function() {
                             <h3 className="font-bold">Please select your answer</h3>
                             
                             {isAnswered ? (
-                                <Option option={selectedOption} isActive={true} />
+                                <OptionGroupDisabled selected={selectedOption} options={quiz.options} />
                             ): (
                                 <OptionGroup options={quiz.options} />
                             )}

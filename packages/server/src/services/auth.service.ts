@@ -10,7 +10,7 @@ export default class AuthService {
         try {
             const user = await User.findOne({email})
 
-            if(!user) throw new Error('User not registered')
+            if(!user) throw new Error('Invalid credentials')
 
             const isMatchPassword = await user.isPasswordMatch(password)
 

@@ -4,13 +4,13 @@ export const loginSchema = z.object({
     email: string().email(),
     password: string({
         required_error: 'Password must not empty'
-    }).min(6)
+    })
 })
 
 export const registerSchema = z.object({
     name: string({
         required_error: 'Name must not empty'
-    }).min(3),
+    }).min(3, "Name must have 3 characters or more"),
     email: string().email(),
     password: string({
         required_error: 'Password must not empty'

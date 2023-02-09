@@ -13,6 +13,29 @@ export const authApiSlice = apiSlice.injectEndpoints({
                         body: {email, password}
                     }
                 },
+                async onQueryStarted(arg, api) {
+                    const result = await api.queryFulfilled
+                    const token = result.data.token
+                    const user = result.data.user
+                    api.dispatch(setAuthToken(token))
+                    api.dispatch(setAuthUser(user))
+                },
+            }),
+            signUp: build.mutation({
+                query(args) {
+                    return {
+                        url: '/auth/signup',
+                        method: 'POST',
+                        body: args
+                    }
+                },
+                async onQueryStarted(arg, api) {
+                    const result = await api.queryFulfilled
+                    const token = result.data.token
+                    const user = result.data.user
+                    api.dispatch(setAuthToken(token))
+                    api.dispatch(setAuthUser(user))
+                },
             }),
             signOut: build.mutation({
                 query() {
@@ -59,6 +82,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
 export const { 
     useSignInMutation,
+    useSignUpMutation,
     useSignOutMutation,
     useRefreshMutation,
     useGetUserMutation

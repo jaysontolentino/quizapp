@@ -10,6 +10,7 @@ const persistConfig = {
     storage
 }
 
+//const persistedAuthReducer = persistReducer(persistConfig, authReducer)
 const persistedQuizReducer = persistReducer(persistConfig, quizReducer)
 
 const rootReducer = combineReducers({

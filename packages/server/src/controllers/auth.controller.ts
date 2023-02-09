@@ -4,7 +4,6 @@ import createHttpError from 'http-errors'
 import AuthService from './../services/auth.service'
 import UserService from './../services/user.service'
 import { TRegisterSchema } from './../schema/auth.schema'
-import config from './../config/config'
 
 const signIn = async function(req: Request, res: Response, next: NextFunction) {
     try {
@@ -53,6 +52,7 @@ const signUp = async function(req: Request<{},{},TRegisterSchema>, res: Response
         })
         
     } catch (error) {
+        console.log(error)
         next(error)
     }
 }

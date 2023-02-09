@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { selectAnswer, active } from '../../features/quiz/quizSlice'
 
 export interface IOption {
+    id: number,
     value: string,
     label: string
 }

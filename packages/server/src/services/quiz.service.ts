@@ -44,4 +44,13 @@ export default class QuizService {
             throw error
         }
     }
+
+    static async calculateScore(payload: any[]) {
+        try {
+            const quizAnswers = await Quiz.find().select('answer')
+            return quizAnswers
+        } catch (error) {
+            throw error
+        }
+    }
 }

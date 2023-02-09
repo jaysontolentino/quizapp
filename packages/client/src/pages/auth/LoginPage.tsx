@@ -16,12 +16,12 @@ const LoginPage = function() {
                 {/* Login features */}
                 <Login />
 
-                <span>Or</span>
+                {/* <span>Or</span>
 
                 <button className='w-full flex justify-center items-center gap-x-2 bg-white py-4 rounded-lg shadow-lg text-bold text-lg'>
                     <img src={googleIcon} className='object-cover ' alt="google icon" />
                         Sign In with Google
-                </button>
+                </button> */}
                 
             </div>
         </div>

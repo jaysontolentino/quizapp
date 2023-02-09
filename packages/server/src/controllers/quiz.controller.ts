@@ -26,6 +26,32 @@ const getQuizById = async function(req: Request, res: Response, next: NextFuncti
     }
 }
 
+const getQuizScore = async function(req: Request, res: Response, next: NextFunction) {
+    try {
+        const {answers} = req.body
+
+        let scores = 0
+
+        for(let i = 0; i < answers.length; i++) {
+            const qNo = Number(answers[i].id)
+            const q = await QuizService.getByQuizNo(qNo)
+
+            if(q?.answer === answers[i].value) {
+                scores++
+            }
+        }
+
+        console.log('user answers - ', answers)
+
+        res.json({
+            scores
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+
 const createQuiz = async function(req: Request, res: Response, next: NextFunction) {
     try {
         let quiz = await QuizService.createQuiz({
@@ -83,5 +109,6 @@ export default {
     getQuizById,
     createQuiz,
     updateQuiz,
-    deleteQuiz
+    deleteQuiz,
+    getQuizScore
 }

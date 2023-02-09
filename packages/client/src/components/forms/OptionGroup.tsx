@@ -4,7 +4,7 @@ import { useAppSelector } from '../../app/hooks'
 import { selectedAnswer } from '../../features/quiz/quizSlice'
 
 interface IOption {
-    _id: string,
+    id: number,
     value: string,
     label: string
 }

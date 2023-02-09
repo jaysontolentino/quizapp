@@ -1,61 +1,69 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import Input from '../../components/forms/Input'
 import { useSignInMutation } from './authApiSlice'
-import { useAppDispatch } from '../../app/hooks'
-import { setAuthToken, setAuthUser } from './authSlice'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Alert from '../../components/Alert'
 
 const Login = function() {
-
-    const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const location = useLocation()
 
     const from = location.state?.pathname || '/quiz'
 
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
-    const [signIn, {data, isLoading, isError, error}] = useSignInMutation()
+    const [formError, setFormError] = useState('')
+    const [isError, setIsError] = useState(false)
+    const [formData, setFormData] = useState<{
+        email: string,
+        password: string
+    }>({email: '', password: ''})
 
-    const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setEmail(e.target.value)
-    }
+    const [signIn,loginResult] = useSignInMutation()
 
-    const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
-        setPassword(e.target.value)
+
+        const {name, value} = e.target
+        setFormData({
+            ...formData,
+            [name]: value
+        })
+
+        setIsError(false)
+        setFormError('')
     }
 
     const handleSignIn = async () => {
         try {
-            await signIn({email, password}).unwrap()
-
-            
-            
+            await signIn(formData).unwrap()
+            navigate(from, {replace: true})
         } catch (error) {
-            console.log(error)
+            const err = error as any
+            //setIsError(true)
+            //setFormError(err.message)
         }
     }
 
     useEffect(() => {
-        if(data) {
-            dispatch(setAuthUser(data?.user))
-            dispatch(setAuthToken(data?.token))
-
-            navigate(from, {replace: true})
+        if(loginResult.isError) {
+            const err = loginResult.error as any
+            setIsError(true)
+            setFormError(err.data.error)
         }
-    }, [data])
+    }, [loginResult])
+
 
     return (
-        <div className="bg-white py-10 px-6 rounded-lg shadow-md flex flex-col items-center gap-y-4 w-full">   
-            <Input type="email" placeholder="Email" onChange={handleChangeEmail} />
-            <Input type="password" placeholder="Password" onChange={handleChangePassword} />
+        <div className="bg-white py-10 px-6 rounded-lg shadow-md flex flex-col items-center gap-y-4 w-full"> 
 
-            <button disabled={isLoading}
-            className='w-full rounded-md border-none outline-none py-3 bg-blue-600 text-white hover:bg-blue-500'
+            {isError && <Alert type='error'>{formError}</ Alert>}
+            
+            <Input type="email" placeholder="Email" name="email" onChange={onChangeInput} />
+            <Input type="password" placeholder="Password" name="password" onChange={onChangeInput} />
+
+            <button disabled={loginResult.isLoading}
+            className='w-full rounded-md border-none outline-none py-3 bg-indigo-500 text-white hover:bg-indigo-400'
             onClick={handleSignIn}>
-                {isLoading ? 'Loading...' : 'Sign In'}
+                {loginResult.isLoading ? 'Loading...' : 'Sign In'}
             </button>
         </div>
     )

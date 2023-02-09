@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Input from '../../components/forms/Input'
 import googleIcon from './../../assets/google.png'
+import Register from '../../features/auth/Register'
 
 const RegisterPage = function () {
     return (
@@ -13,29 +14,15 @@ const RegisterPage = function () {
                 </div>
                 
 
-                <div className="bg-white py-10 px-6 rounded-lg shadow-md flex flex-col items-center gap-y-4 w-full">
-                    <Input type="text" placeholder='Firstname' />
+                <Register />
 
-                    <Input type="text" placeholder="Lastname" />
-
-                    <Input type="email" placeholder="Email" />
-
-                    <Input type="password" placeholder="Password" />
-
-                    <Input type="password" placeholder="Confirm Password" />
-
-                    <button className='w-full rounded-md border-none outline-none py-3 bg-blue-600 text-white hover:bg-blue-500'>Sign Up</button>
-
-                    
-                </div>
-
-                <span>Or</span>
+                {/* <span>Or</span>
 
                 <button className='w-full flex justify-center items-center gap-x-2 bg-white py-4 rounded-lg shadow-lg text-bold text-lg'>
                     <img src={googleIcon} className='object-cover ' alt="google icon" />
                         Sign Up with Google
                 </button>
-                
+                 */}
             </div>
         </div>
         
